@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduCode Platform - Interactive</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3), transparent 25%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.3), transparent 25%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-img {
+      max-width: 180px;
+      margin-bottom: 1rem;
+      border-radius: 50%;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      color: #34495e;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 700;
+      z-index: 1;
+      text-shadow: 0 0 5px #aab7c4;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: #2980b9;
+      margin-bottom: 0.5rem;
+      border-bottom: 3px solid #2980b9;
+      padding-bottom: 0.3rem;
+      z-index: 1;
+      text-shadow: 0 0 3px #6ab0f3;
+      font-weight: 900; /* extra bold */
+      text-transform: uppercase; /* force ALL CAPS */
+    }
+
+    section {
+      background: #ffffffdd;
+      width: 100%;
+      max-width: 900px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+      color: #2c3e50;
+      user-select: text;
+    }
+
+    #tutorials {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    #tutorials button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #ecf0f1;
+      border: 2px solid #2980b9;
+      color: #2980b9;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(41, 128, 185, 0.3);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+    }
+    #tutorials button:hover, #tutorials button.active {
+      background: #2980b9;
+      color: white;
+      box-shadow: 0 6px 15px rgba(41, 128, 185, 0.7);
+    }
+
+    #tutorialContent {
+      background: #d6e6f3;
+      border-left: 6px solid #2980b9;
+      padding: 1rem 1.5rem;
+      border-radius: 6px;
+      white-space: pre-wrap;
+      font-family: 'Source Code Pro', monospace;
+      color: #2c3e50;
+      min-height: 120px;
+      font-size: 1rem;
+      box-shadow: inset 0 0 10px #a4c0db;
+    }
+
+    .exercise-img {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 10px;
+      margin-top: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-family: monospace;
+      font-size: 1rem;
+      padding: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      margin-bottom: 1rem;
+      background: #f8f9fa;
+    }
+
+    /* Fancy Buttons */
+    button.run, button.new, button.clear {
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      margin-right: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    button.run {
+      background: linear-gradient(135deg, #27ae60, #219150);
+      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+    }
+    button.run:hover {
+      background: linear-gradient(135deg, #219150, #176b3a);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(39, 174, 96, 0.6);
+    }
+
+    button.new {
+      background: linear-gradient(135deg, #2980b9, #1c5d8b);
+      box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
+    }
+    button.new:hover {
+      background: linear-gradient(135deg, #1c5d8b, #163f5a);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(41, 128, 185, 0.6);
+    }
+
+    button.clear {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+    }
+    button.clear:hover {
+      background: linear-gradient(135deg, #c0392b, #962d22);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6);
+    }
+
+    #output {
+      background: #1e1e1e;
+      color: #00ff00;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      white-space: pre-wrap;
+      min-height: 100px;
+      font-family: 'Source Code Pro', monospace;
+      box-shadow: inset 0 0 10px #333;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/skulpt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/skulpt-stdlib.js"></script>
+</head>
+<body>
+
+  <!-- Hero image -->
+  <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" alt="Coding Banner" class="hero-img" />
+
+  <h1>EduCode Platform</h1>
+
+  <section id="tutorials-section">
+    <h2>INTERACTIVE TUTORIALS</h2>
+    <div id="tutorials"></div>
+    <pre id="tutorialContent" aria-live="polite" tabindex="0"></pre>
+  </section>
+
+  <section id="exercise-section">
+    <h2>EXERCISE <span id="exerciseProgress"></span></h2>
+    <div id="exercise"></div>
+    <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c" alt="Exercise Illustration" class="exercise-img" />
+  </section>
+
+  <section id="code-section">
+    <h2>CODE EDITOR</h2>
+    <textarea id="codeInput" spellcheck="false" aria-label="Code editor" placeholder="Write your Python code here..."></textarea><br />
+    <button class="run" onclick="runCode()">Run & Analyze Code</button>
+    <button class="new" onclick="newExercise()">New Exercise</button>
+    <button class="clear" onclick="clearOutput()">Clear Output</button>
+    <div id="output" aria-live="polite" tabindex="0"></div>
+  </section>
+
+  <script>
+    const tutorials = [
+      { title: "📦 Variables", content: "Variables store data values in Python. Example:\n\nx = 10\nprint(x)" },
+      { title: "🔀 If Statements", content: "Conditional logic using if:\n\nif x > 5:\n    print('x is big')" },
+      { title: "🔁 Loops", content: "Repeat actions using loops:\n\nfor i in range(5):\n    print(i)" }
+    ];
+
+    const exercises = [
+      { question: "Write a Python program to print numbers from 1 to 5.", answer: "for i in range(1,6):\n    print(i)" },
+      { question: "Create a variable 'name' and print 'Hello, <name>'", answer: "name = 'Alice'\nprint('Hello,', name)" },
+      { question: "Write a Python program to check if a number is even or odd.", answer: "x = 4\nif x % 2 == 0:\n    print('Even')\nelse:\n    print('Odd')" }
+    ];
+
+    let currentExerciseIndex = 0;
+
+    function setupTutorials() {
+      const container = document.getElementById("tutorials");
+      tutorials.forEach((tut, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = tut.title;
+        btn.onclick = () => {
+          document.getElementById("tutorialContent").textContent = tut.content;
+          document.querySelectorAll("#tutorials button").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function displayExercise(index) {
+      document.getElementById("exercise").textContent = exercises[index].question;
+      document.getElementById("exerciseProgress").textContent = `( ${index + 1} / ${exercises.length} )`;
+    }
+
+    function newExercise() {
+      currentExerciseIndex = (currentExerciseIndex + 1) % exercises.length;
+      displayExercise(currentExerciseIndex);
+    }
+
+    function builtinRead(x) {
+      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+        throw "File not found: '" + x + "'";
+      return Sk.builtinFiles["files"][x];
+    }
+
+    function runCode() {
+      let code = document.getElementById("codeInput").value;
+      let output = document.getElementById("output");
+      output.textContent = "";
+      Sk.pre = "output";
+      Sk.configure({ output: s => output.textContent += s, read: builtinRead });
+      Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, code, true))
+        .catch(err => { output.textContent += "\nError: " + err.toString(); });
+    }
+
+    function clearOutput() {
+      document.getElementById("output").textContent = "";
+    }
+
+    // Initialize after DOM load
+    window.onload = function() {
+      setupTutorials();
+      displayExercise(currentExerciseIndex);
+    };
+  </script>
+
+</body>
+</html>
